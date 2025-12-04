@@ -3,33 +3,85 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [resBack, resVal] = useState("");
+  const [user, userVal] = useState("");
+  const [input, inputval] = useState("");
+
+  const sendData = async () => {
+  const body = {
+    name: "Juan",
+    message: input
+  };
+  userVal(input);
+
+  const res = await fetch("http://localhost:5555/log", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    
+    body: JSON.stringify(body)
+  });
+
+  const data = await res.json();
+  resVal(data.message);
+  console.log("Respuesta backend:", data.message);
+};
+
 
   return (
     <>
       <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+
+      <div className="card flex flex-col p-4">
+        <div className='ia-message ml-auto'>
+          <h2>mensaje front</h2>
+          <p>
+            {user}
+          </p>
+        </div>
+
+        <div className='user-message mr-auto'>
+          <h2>Respuesta back</h2>
+          <p>
+            {resBack}
+          </p>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="card flex flex-col p-4">
+        <div className='ia-message ml-auto'>
+          <h2>mensaje front</h2>
+          <p>
+            {user}
+          </p>
+        </div>
+
+        <div className='user-message mr-auto'>
+          <h2>Respuesta back</h2>
+          <p>
+            {resBack}
+          </p>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      
+      </div>
+      <div className='text-area'>
+        <input
+            type="text"
+            id="input-text"
+            onChange={(e) => inputval(e.target.value)}
+            />
+        <button onClick={sendData}>Enviar datos</button>
+      </div>
     </>
   )
 }
+
+<style scoped>
+  
+</style>
 
 export default App
