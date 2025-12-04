@@ -15,3 +15,4 @@ npm install leaflet react-leaflet
 
 
 
+npm run dev
