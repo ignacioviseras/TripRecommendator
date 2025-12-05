@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
+import ReactMarkdown from "react-markdown";
 import './App.css'
 
 type mock = {
@@ -44,7 +45,8 @@ function App() {
       message: msg
     };
 
-    const res = await fetch("http://localhost:5555/log", {
+    console.log(body);
+    const res = await fetch("http://localhost:5555/message", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -64,18 +66,17 @@ function App() {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+            className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} mb-2`}
           >
-            <div 
-              className={`
-                  max-w-[75%] p-3 rounded-xl
-                  ${msg.sender === "user" ? "bg-blue-600" : "bg-gray-800"}
-                `}
-              >
-              <p className="break-words text-left">
+            {msg.sender === "user" ? (
+              <div className="max-w-[75%] p-3 rounded-xl bg-blue-600 break-words text-left">
                 {msg.message}
-              </p>
-            </div>
+              </div>
+            ) : (
+              <div className="max-w-[75%] p-3 rounded-xl bg-gray-800 break-words text-left">
+                <ReactMarkdown>{msg.message}</ReactMarkdown>
+              </div>
+            )}
           </div>
         ))}
       </div>
