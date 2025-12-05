@@ -18,14 +18,14 @@ app.get('/health', (req, res) =>(
 ));
 
 app.post('/log', (req, res) => {
-    const datos = req.body;
+    const data = req.body;
 
-    console.log("Datos recibidos:", datos);
-    let respon = datos.message + " soy back";
+    console.log("Datos recibidos:", data);
+    let respon = data.message + " soy back";
     res.json({
-        status: 'ok',
+        sender: "backend",
         message: respon,
-        data: datos
+        data: data
     });
 });
 
