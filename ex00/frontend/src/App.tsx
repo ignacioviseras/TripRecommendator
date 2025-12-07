@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import MapComponent from './MapComponent';
 import './App.css'
+import "/node_modules/flag-icons/css/flag-icons.min.css";
 
 type mock = {
   sender: "user" | "backend";
   message: string;
   places?: any[];
 };
-
-
 
 function App() {
   const [messages, messagesVal] = useState<mock[]>([]);
@@ -31,6 +30,7 @@ function App() {
       places = data.data.places;
       format = data.data.places.map((p: any) => {
         return `
+          <span class="fi fi-${p.countryFlag.toLowerCase()}"></span> 
           <strong>
             ${p.name}
           </strong>

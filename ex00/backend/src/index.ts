@@ -35,7 +35,7 @@ export async function getTravelRecommendations(ai: GoogleGenAI, prompt: string) 
 
               IMPORTANTE:
               - Devuelve exactamente 4 sitios.
-              - Cada sitio debe incluir: nombre, bandera emoji, descripción corta y coordenadas reales.
+              - Cada sitio debe incluir: nombre, iniciales de la bandera, descripción corta y coordenadas reales.
               - RESPONDE SOLO CON JSON.
             `
           }
