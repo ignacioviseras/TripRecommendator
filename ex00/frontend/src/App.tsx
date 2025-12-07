@@ -1,18 +1,16 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import ReactMarkdown from "react-markdown";
-import flag from 'country-code-emoji';
+import MapComponent from './MapComponent';
 import './App.css'
 
 type mock = {
   sender: "user" | "backend";
   message: string;
+  places?: any[];
 };
 
+
+
 function App() {
-  // const [resBack, resVal] = useState("");
-  // const [user, userVal] = useState("");
   const [messages, messagesVal] = useState<mock[]>([]);
   const [input, inputval] = useState("");
 
@@ -21,33 +19,34 @@ function App() {
       ...prev,
       {
         sender: "user",
-        message: text
+        message: text,
       }
     ]);
   };
 
-  // <em>Lat:</em> ${p.location.lat} — <em>Lng:</em> ${p.location.lng}
   const addBackendMessage = (data: any) => {
     let format = "";
+    let places = "";
     if (data?.sender && data?.data?.places){
-      const emojiFlag = flag(p.countryCode || "");
-      format = data.data.places.map((p: any) =>
-        `
+      places = data.data.places;
+      format = data.data.places.map((p: any) => {
+        return `
           <strong>
-            ${p.countryFlag} - ${p.name}
+            ${p.name}
           </strong>
           <br/>
           ${p.description}
           <br/>
         `
-      ).join("<br/><br/>");
+      }).join("<br/>");
     }
 
     messagesVal((prev) => [
       ...prev,
       {
         sender: data.sender,
-        message: format
+        message: format,
+        places: data.data.places
       }
     ]);
   };
@@ -91,11 +90,21 @@ function App() {
                 {msg.message}
               </div>
             ) : (
-              // respuesta del back parseada a html con la funcion addBackendMessage
-              <div
-                dangerouslySetInnerHTML={{ __html: msg.message}}
-                className="max-w-[75%] p-3 rounded-xl bg-gray-800 break-words text-left"
-              />
+              <div className="max-w-[75%] p-3 rounded-xl bg-gray-800 break-words text-left">
+                <div
+                  dangerouslySetInnerHTML={{ __html: msg.message}}
+                  // className="max-w-[75%] p-3 rounded-xl bg-gray-800 break-words text-left"
+                  />
+                {msg.places && (
+                  <>
+                    <div id={`map-container-${index}`} />
+                   
+                    <MapComponent
+                      places={msg.places}
+                      />
+                  </>
+                )}
+              </div>
             )}
           </div>
         ))}
@@ -127,7 +136,9 @@ function App() {
 
 
 }
-
+//  <MapComponent
+//                       places={msg.places}
+//                       mapId={`map-${index}`}/>
 <style scoped>
   
 </style>

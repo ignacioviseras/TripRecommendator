@@ -7,26 +7,26 @@ export const prompt = {
         type: "object",
         properties: {
           name: {
-			type: "string"
-		  },
+            type: "string"
+          },
           countryFlag: {
-			type: "string"
-		  },
+            type: "string"
+          },
           description: {
-			type: "string"
+            type: "string"
 
-		  },
+          },
           location: {
             type: "object",
             properties: {
               lat: {
-				type: "number"
+                type: "number"
 
-			  },
+              },
               lng: {
-				type: "number"
+                type: "number"
 
-			  }
+              }
             },
             required: ["lat", "lng"]
           }
