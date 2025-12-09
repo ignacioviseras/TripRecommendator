@@ -11,47 +11,6 @@ const defaultIcon = L.icon({
 });
 L.Marker.prototype.options.icon = defaultIcon;
 
-// const MapComponent = ({ places }: { places: any[] }) => {
-//   useEffect(() => {
-//     if (!places || places.length === 0) return;
-
-//     // Eliminar mapa anterior si existe
-//     const old = document.getElementById("leaflet-map");
-//     if (old) old.remove();
-
-//     // Crear contenedor
-//     const mapDiv = document.createElement("div");
-//     mapDiv.id = "leaflet-map";
-//     mapDiv.style.width = "100%";
-//     mapDiv.style.height = "300px";
-//     mapDiv.style.borderRadius = "12px";
-//     mapDiv.style.marginTop = "10px";
-
-//     const container = document.getElementById("map-container");
-//     container?.appendChild(mapDiv);
-
-//     // Inicializar mapa
-//     const map = L.map("leaflet-map").setView(
-//       [places[0].location.lat, places[0].location.lng],
-//       6
-//     );
-
-//     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-//       maxZoom: 19,
-//     }).addTo(map);
-
-//     // Añadir marcadores
-//     places.forEach((p) => {
-//       if (!p.location)
-// 		return;
-
-//       L.marker([p.location.lat, p.location.lng]).addTo(map).bindPopup(p.name);
-//     });
-
-//   }, [places]);
-
-//   return <div id="map-container"></div>;
-// };
 const MapComponent = ({ places }: { places: any[] }) => {
   
   const mapRef = useRef<HTMLDivElement | null>(null);
@@ -60,27 +19,34 @@ const MapComponent = ({ places }: { places: any[] }) => {
     if (!mapRef.current)
       return;
     if (!places || places.length === 0)
-        return;
+      return;
 
     // la libreia añade _leaflet_id` al div q contine el mapa
     if ((mapRef.current as any)._leaflet_id) {
       (mapRef.current as any)._leaflet_id = null;
     }
 
-    const map = L.map(mapRef.current).setView(
-      [places[0].location.lat, places[0].location.lng],
-      6
-    );
+    const map = L.map(mapRef.current);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
     }).addTo(map);
 
+    const bounds = L.latLngBounds([]);
     places.forEach((p) => {
-      if (!p.location) return;
-      L.marker([p.location.lat, p.location.lng]).addTo(map).bindPopup(p.description);
+      if (!p.location)
+        return;
+      const location = L.latLng(p.location.lat, p.location.lng);
+      L.marker(location).addTo(map).bindPopup(p.description);
+      bounds.extend(location);
     });
 
+    if (bounds.isValid()) {
+      map.fitBounds(bounds, { padding: [30, 30] });
+    } else {
+      map.setView([20, 0], 2);
+    }
+    map.fitBounds(bounds, { padding: [30, 30] });
     return () => {
       map.remove();
     };

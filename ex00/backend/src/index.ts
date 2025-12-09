@@ -50,14 +50,6 @@ export async function getTravelRecommendations(ai: GoogleGenAI, prompt: string) 
 
   const text = res.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
   const json = JSON.parse(text);
-
-  // if (json.places?.[0]?.countryFlag) {
-  //   console.log("countryFlag:", json.places[0].countryFlag);
-  //   console.log("Longitud de countryFlag:", json.places[0].countryFlag.length);
-  // } else {
-  //   console.log("countryFlag no existe");
-  //   console.log(json);
-  // }
   return json;
 }
 
@@ -67,9 +59,6 @@ app.post('/message', async (req, res) => {
     console.log("Datos recibidos:", req.body);
     try {
         const travelData = await getTravelRecommendations(ai, message);
-    // console.log("-------------------");
-    // console.log("length" + travelData.places.countryFlag.length());
-    // console.log("-------------------");
 
         res.json({
             sender: "backend",
@@ -84,8 +73,6 @@ app.post('/message', async (req, res) => {
         });
     }
 });
-
-
 
 app.listen(PORT, () => {
 	console.log("port: " + PORT);

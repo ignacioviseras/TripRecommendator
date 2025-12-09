@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import MapComponent from './MapComponent';
 import './App.css'
 import "/node_modules/flag-icons/css/flag-icons.min.css";
@@ -12,7 +12,7 @@ type mock = {
 function App() {
   const [messages, messagesVal] = useState<mock[]>([]);
   const [input, inputval] = useState("");
-
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const addUserMessage = (text: string) => {
     messagesVal((prev) => [
       ...prev,
@@ -50,6 +50,10 @@ function App() {
       }
     ]);
   };
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const sendData = async () => {
     if (!input.trim())
@@ -93,7 +97,6 @@ function App() {
               <div className="max-w-[75%] p-3 rounded-xl bg-gray-800 break-words text-left">
                 <div
                   dangerouslySetInnerHTML={{ __html: msg.message}}
-                  // className="max-w-[75%] p-3 rounded-xl bg-gray-800 break-words text-left"
                   />
                 {msg.places && (
                   <>
@@ -108,11 +111,13 @@ function App() {
             )}
           </div>
         ))}
+        <div ref={bottomRef} />
       </div>
 
       <div className="p-4 flex gap-3 items-center">
         <input
           type="text"
+          value={input}
           className="flex-1 p-2 rounded-lg bg-gray-700 border border-gray-600 focus:outline-none"
           placeholder="Escribe un sitio para viajar..."
           onChange={(e) => inputval(e.target.value)}
