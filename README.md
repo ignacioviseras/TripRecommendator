@@ -21,3 +21,4 @@ una vez q este todo nos vamos a la carpeta `ex00/` y hacemos estos comandos
 docker-compose build
 docker-compose up
 ```
+luego podremos acceder a localhost y ya estara funcionando [localhost](http://localhost5173)
